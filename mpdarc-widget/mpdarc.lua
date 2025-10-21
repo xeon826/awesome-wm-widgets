@@ -53,6 +53,16 @@ local mpdarc_current_song_widget = wibox.widget {
     font = 'Play 9'
 }
 
+-- Helper function to truncate text and add ... if too long
+local function truncate_text(text, max_length)
+    max_length = max_length or 32 -- default max length
+    if #text > max_length then
+        return text:sub(1, max_length - 3) .. "..."
+    else
+        return text
+    end
+end
+
 local update_graphic = function(widget, stdout, _, _, _)
     local current_song = string.gmatch(stdout, "[^\r\n]+")()
     stdout = string.gsub(stdout, "\n", "")
@@ -62,12 +72,12 @@ local update_graphic = function(widget, stdout, _, _, _)
       icon.image = PLAY_ICON_NAME
       widget.colors = { beautiful.widget_main_color }
       widget.value = tonumber((100-mpdpercent)/100)
-      mpdarc_current_song_widget.markup = current_song
+      mpdarc_current_song_widget.markup = truncate_text(current_song, 17)
     elseif mpdstatus == "paused" then
       icon.image = PAUSE_ICON_NAME
       widget.colors = { beautiful.widget_main_color }
       widget.value = tonumber(mpdpercent/100)
-      mpdarc_current_song_widget.markup = current_song
+      mpdarc_current_song_widget.markup = truncate_text(current_song, 17)
     else
       icon.image = STOP_ICON_NAME
       if string.len(stdout) == 0 then -- MPD is not running
