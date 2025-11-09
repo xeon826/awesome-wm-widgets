@@ -109,7 +109,7 @@ local function show_MPD_status()
             notification = naughty.notify {
                 text = stdout,
                 title = "MPD",
-                timeout = 5,
+                timeout = 2,
                 hover_timeout = 0.5,
                 width = 600,
             }
